@@ -1,111 +1,145 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>FH WLAN Generator — Khairul</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FH WLAN Generator – Khairul</title>
 
-<!-- QR lib (client side) -->
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js" defer></script>
-
-<!-- MOBILE-FIRST STYLES -->
 <style>
-  :root{
-    --bg:#f5f7fa; --card:#ffffff; --muted:#7d8b96; --text:#0f1720;
-    --accent:#6f42c1; --accent-2:#5a20a6; --glass:rgba(255,255,255,0.6);
-    --success:#2f8f6a;
-  }
-  @media(prefers-color-scheme:dark){
-    :root{
-      --bg:#071023; --card:#081226; --muted:#9aa9b8; --text:#e6f0fb; --glass:rgba(10,12,16,0.45)
+    body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #0f0f13;
+        color: #f0f0f0;
     }
-  }
-
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-  .container{max-width:760px;margin:18px auto;padding:12px}
-  /* card */
-  .card{background:var(--card);border-radius:14px;padding:16px;box-shadow:0 12px 28px rgba(12,15,30,0.06);transition:transform .18s ease,box-shadow .18s ease;overflow:hidden}
-  .card:active{transform:translateY(-2px)}
-  /* header */
-  .head{display:flex;align-items:center;gap:12px}
-  .logo{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;flex:0 0 54px}
-  h1{margin:0;font-size:18px}
-  .meta{font-size:13px;color:var(--muted)}
-  /* form row */
-  .form-row{display:flex;gap:10px;margin-top:12px;align-items:center;flex-wrap:wrap}
-  .input{flex:1;padding:12px 14px;border-radius:12px;border:1px solid rgba(15,20,30,0.06);font-size:16px;background:transparent;color:var(--text);outline:none}
-  .input:focus{box-shadow:0 6px 18px rgba(111,66,193,0.08);border-color:rgba(111,66,193,0.14)}
-  .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;border:0;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:10px}
-  .btn.ghost{background:transparent;border:1px solid rgba(15,20,30,0.06);color:var(--text)}
-  .btn:disabled{opacity:.6;cursor:not-allowed}
-  /* output */
-  .output{margin-top:14px;padding:12px;border-radius:12px;border:1px solid rgba(15,20,30,0.03);background:linear-gradient(180deg,var(--glass),transparent);display:flex;gap:12px;align-items:center;justify-content:space-between;min-height:62px}
-  .left{display:flex;flex-direction:column;gap:8px}
-  .result{font-weight:700;font-size:17px}
-  .status{font-size:13px;color:var(--muted)}
-  .badge{padding:6px 10px;border-radius:999px;background:rgba(111,66,193,0.08);color:var(--accent);font-weight:700;font-size:13px}
-  /* qr */
-  .qr{width:100px;height:100px;border-radius:10px;border:1px solid rgba(15,20,30,0.03);display:flex;align-items:center;justify-content:center}
-  /* mapping & footer */
-  .mapping{margin-top:14px;color:var(--muted);font-size:13px}
-  .footer{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
-  /* toast */
-  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .28s}
-  .toast.show{opacity:1;pointer-events:auto}
-  /* responsive small screens */
-  @media(max-width:520px){
-    .logo{width:46px;height:46px}
-    .qr{width:78px;height:78px}
-    .result{font-size:15px}
-    h1{font-size:16px}
-  }
+    .card {
+        max-width: 600px;
+        margin: 20px auto;
+        background: #1b1b22;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 0 15px #0008;
+    }
+    .title {
+        font-size: 1.7rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .sub {
+        opacity: 0.8;
+        margin-bottom: 18px;
+    }
+    input {
+        width: 100%;
+        padding: 14px;
+        border-radius: 12px;
+        border: none;
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    button {
+        width: 100%;
+        padding: 14px;
+        border-radius: 12px;
+        border: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-top: 6px;
+        cursor: pointer;
+        background: #7a4bff;
+        color: white;
+    }
+    button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .copy {
+        background: #30303a;
+        margin-top: 10px;
+    }
+    .outputBox {
+        background: #26262e;
+        padding: 16px;
+        border-radius: 12px;
+        margin-top: 14px;
+        font-size: 1.1rem;
+        word-break: break-all;
+    }
+    .map {
+        margin-top: 20px;
+        opacity: 0.75;
+        font-size: .9rem;
+        line-height: 1.5rem;
+    }
 </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="card" role="main" aria-label="FH WLAN Generator">
-      <div class="head">
-        <div class="logo">KH</div>
-        <div style="flex:1">
-          <h1>FH WLAN Generator</h1>
-          <div class="meta">Crafted by <strong>Khairul Ikhwan Ramadhan</strong> · <span style="color:var(--muted)">2025 · Static</span></div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-          <div style="font-size:12px;color:var(--muted)">v1.3</div>
-        </div>
-      </div>
 
-      <p class="meta" style="margin-top:12px">Masukkan SSID sumber yang diawali <code>fh_</code>. Contoh: <code>fh_XxXxXx_5G</code></p>
+<div class="card">
+    <div class="title">FH WLAN Generator</div>
+    <div class="sub">Crafted by <b>Khairul Ikhwan Ramadhan</b> · 2025</div>
 
-      <div class="form-row">
-        <input id="inputField" class="input" type="text" placeholder="fh_XxXxXx_5G" aria-label="SSID input" value="fh_XxXxXx_5G" />
-        <button id="generateBtn" class="btn" type="button">Get Passkey</button>
-        <button id="copyBtn" class="btn ghost" type="button" disabled>📋 Copy</button>
-      </div>
+    <input id="ssid" placeholder="Contoh: fh_XxXxXx_5G">
 
-      <div class="output" aria-live="polite">
-        <div class="left">
-          <div id="outputText" class="result">Output will appear here</div>
-          <div style="display:flex;gap:10px;align-items:center">
-            <div id="bandBadge" class="badge">band: —</div>
-            <div id="statusText" class="status">wlan... (live)</div>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-          <div id="qr" class="qr" aria-hidden="true"></div>
-          <div style="font-size:12px;color:var(--muted)">Scan QR untuk connect</div>
-        </div>
-      </div>
+    <button id="genBtn">Get Passkey</button>
+    <button id="copyBtn" class="copy" disabled>Copy</button>
 
-      <div class="mapping" id="mapping">
-        <strong>Mapping:</strong> a ↔ 5, b ↔ 4, c ↔ 3, d ↔ 2, e ↔ 1, f ↔ 0, 6 ↔ 9, 7 ↔ 8
-      </div>
+    <div id="out" class="outputBox">Output will appear here</div>
+
+    <div class="map">
+        <b>Mapping:</b> a ↔ 5, b ↔ 4, c ↔ 3, d ↔ 2, e ↔ 1, f ↔ 0,  
+        6 ↔ 9, 7 ↔ 8
     </div>
+</div>
 
-    <div class="footer">© 2025 Khairul Ikhwan Ramadhan — <a href="https://github.com/khairulikhwanramadhan-hub/wifiFH" target="_blank" rel="noopener" style="color:var(--accent)">Repo</a></div>
-  </div>
+<script>
+function generateSSID(input) {
+    if (!input.startsWith("fh_")) return null;
 
+    // ambil middle part sebelum _5G / _2G
+    const mid = input.replace("fh_", "").replace("_5G", "").replace("_2G", "");
+
+    const table = {a:"5",b:"4",c:"3",d:"2",e:"1",f:"0","6":"9","7":"8",
+                   "5":"a","4":"b","3":"c","2":"d","1":"e","0":"f","9":"6","8":"7"};
+
+    let out = "";
+    for (const ch of mid) out += table[ch.toLowerCase()] ?? ch;
+
+    return "wlan" + out;
+}
+
+const ssid = document.getElementById("ssid");
+const outBox = document.getElementById("out");
+const genBtn = document.getElementById("genBtn");
+const copyBtn = document.getElementById("copyBtn");
+
+genBtn.onclick = () => {
+    const val = ssid.value.trim();
+    const result = generateSSID(val);
+    if (!result) {
+        outBox.textContent = "Invalid input";
+        copyBtn.disabled = true;
+        return;
+    }
+    outBox.textContent = result;
+    copyBtn.disabled = false;
+};
+
+copyBtn.onclick = async () => {
+    try {
+        await navigator.clipboard.writeText(outBox.textContent);
+        copyBtn.textContent = "Copied!";
+        setTimeout(() => copyBtn.textContent = "Copy", 800);
+    } catch {
+        copyBtn.textContent = "Failed";
+        setTimeout(() => copyBtn.textContent = "Copy", 800);
+    }
+};
+</script>
+
+</body>
+</html>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <!-- SCRIPT: logic (safe + mobile friendly) -->
