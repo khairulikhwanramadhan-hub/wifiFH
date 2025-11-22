@@ -6,88 +6,176 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>FH WLAN Generator — Khairul</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    :root{--accent:#6f42c1}
-    body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-    .hero{background:linear-gradient(120deg,rgba(111,66,193,0.12),rgba(0,0,0,0));border-radius:14px;padding:28px}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#5a20a6);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
-    .muted{color:#98a0a6}
-    .small{font-size:.9rem}
-    .card-glow{box-shadow:0 6px 18px rgba(111,66,193,0.12)}
-    footer a{color:inherit;text-decoration:underline}
-    @media (max-width:575px){.logo{width:44px;height:44px}}
+    :root{--accent:#6f42c1;--muted:#9aa3ab}
+    body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#f6f8fb,#ffffff)}
+    .card-app{max-width:720px;margin:24px auto;border-radius:16px;box-shadow:0 10px 30px rgba(20,20,40,0.06);overflow:hidden}
+    .hero{padding:28px;background:linear-gradient(180deg,rgba(111,66,193,0.06),rgba(255,255,255,0.6))}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#5a20a6);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+    .muted{color:var(--muted)}
+    .small{font-size:.92rem}
+    .preview-box{min-height:44px;border-radius:8px;border:1px solid #e6e9ef;background:#fbfbfd;display:flex;align-items:center;justify-content:center;padding:8px}
+    .btn-lg-wide{padding-left:28px;padding-right:28px}
+    @media (max-width:576px){.logo{width:48px;height:48px}}
   </style>
 </head>
-<body class="bg-light">
-  <main class="container py-5">
-    <section class="hero card-glow mb-4">
+<body>
+  <div class="card card-app">
+    <div class="hero">
       <div class="d-flex justify-content-between align-items-start mb-3">
-        <div class="brand">
+        <div class="d-flex gap-3 align-items-center">
           <div class="logo">KH</div>
           <div>
-            <h1 class="h4 mb-0">FH WLAN Generator</h1>
+            <h1 class="h5 mb-0">FH WLAN Generator</h1>
             <div class="muted small">Crafted by <strong>Khairul Ikhwan Ramadhan</strong></div>
           </div>
         </div>
         <div class="text-end small muted">2025 · Static HTML</div>
       </div><p class="muted small">Masukkan SSID sumber yang diawali <code>fh_</code>. Contoh: <code>fh_XxXxXx_5G</code></p>
 
-  <div class="row mt-3">
-    <div class="col-md-8">
-      <input id="inputField" class="form-control form-control-lg mb-2" placeholder="Contoh: fh_XxXxXx_5G" aria-label="input" />
+  <div class="row g-2 align-items-center mt-2">
+    <div class="col-12 col-md-8">
+      <input id="inputField" class="form-control form-control-lg" placeholder="Contoh: fh_XxXxXx_5G" aria-label="input" />
     </div>
-    <div class="col-md-4 d-grid gap-2">
-      <button id="generateBtn" class="btn btn-primary btn-lg">Get Passkey</button>
-      <button id="copyBtn" class="btn btn-outline-secondary btn-lg" disabled>Copy</button>
+    <div class="col-12 col-md-4 d-grid">
+      <button id="generateBtn" class="btn btn-primary btn-lg btn-lg-wide" type="button"><i class="bi bi-play-fill me-2"></i>Get Passkey</button>
     </div>
   </div>
 
-  <div class="d-flex align-items-center gap-2 mt-3">
-    <div id="output" class="alert alert-secondary flex-grow-1 text-center" role="status" aria-live="polite">Output will appear here</div>
-    <button id="copyBtn" class="btn btn-outline-secondary" disabled>Copy</button>
-  </div>
-</section>
-
-<section class="mb-4">
-  <div class="card p-3">
-    <h2 class="h6 mb-2">Preview / Info</h2>
-    <p class="muted small mb-1">SSID input → converted middle section → prefixed with <code>wlan</code>.</p>
-    <ul class="small muted">
-      <li>Mapping: a↔5, b↔4, c↔3, d↔2, e↔1, f↔0, 6↔9, 7↔8</li>
-      <li>Huruf selain mapping akan dilewatkan (dengan lowercase untuk huruf).</li>
-    </ul>
-  </div>
-</section>
-
-<section class="text-center">
-  <a class="btn btn-sm btn-link" href="https://github.com/vsec7" target="_blank" rel="noopener">Original by vsec7</a>
-</section>
-
-  </main>  <footer class="bg-dark text-white text-center py-3">
-    <div class="container d-flex justify-content-between align-items-center">
-      <div>© 2025 <strong>Khairul Ikhwan Ramadhan</strong></div>
-      <div><a href="#">Privacy</a> · <a href="#">Source</a></div>
+  <div class="d-flex gap-2 align-items-start mt-3">
+    <div class="flex-grow-1">
+      <div id="output" class="preview-box">Output will appear here</div>
     </div>
-  </footer>  <script>
+    <div>
+      <button id="copyBtn" class="btn btn-outline-secondary" disabled><i class="bi bi-clipboard"></i></button>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <div class="d-flex justify-content-between align-items-center small muted">
+      <div>Preview</div>
+      <div id="previewHint">Mapping live below</div>
+    </div>
+    <div class="mt-2 d-flex gap-2">
+      <div class="flex-fill">
+        <div id="livePreview" class="preview-box muted">wlan... (live)</div>
+      </div>
+      <div style="min-width:160px;">
+        <div class="card p-2 small">
+          <strong>Mapping</strong>
+          <ul class="mb-0 small" style="padding-left:18px">
+            <li>a ↔ 5</li>
+            <li>b ↔ 4</li>
+            <li>c ↔ 3</li>
+            <li>d ↔ 2</li>
+            <li>e ↔ 1</li>
+            <li>f ↔ 0</li>
+            <li>6 ↔ 9, 7 ↔ 8</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="p-3">
+  <h2 class="h6">Preview / Info</h2>
+  <p class="muted small mb-1">SSID input → converted middle section → prefixed with <code>wlan</code>.</p>
+  <p class="small muted">Contoh: <code>fh_XxXxXx_5G</code> → middle <code>XxXxXx</code> → mapping → <code>wlan...</code></p>
+</div>
+
+  </div>  <footer class="text-center small muted mt-3">© 2025 Khairul Ikhwan Ramadhan · <a href="https://github.com/vsec7" target="_blank">original</a></footer>  <script>
+    // mapping pasangan (bi-directional)
     const pairs = [['a','5'],['b','4'],['c','3'],['d','2'],['e','1'],['f','0'],['6','9'],['7','8']];
     const map = Object.create(null);
-    for(const [k,v] of pairs){map[k]=v;map[v]=k}
+    for (const [k,v] of pairs) { map[k]=v; map[v]=k }
+
+    // helpers
     const inputField = document.getElementById('inputField');
     const output = document.getElementById('output');
     const generateBtn = document.getElementById('generateBtn');
     const copyBtn = document.getElementById('copyBtn');
+    const livePreview = document.getElementById('livePreview');
 
-    function mapChar(c){const lower=c.toLowerCase(); if(map.hasOwnProperty(lower)) return map[lower]; return (/[A-Za-z]/.test(c))? lower : c}
-    function generateSSID(input){ if(!input || !input.toLowerCase().startsWith('fh_')) return ''; const parts=input.split('_').filter(Boolean); if(parts.length<2) return ''; const middle=parts[1]; if(!middle) return ''; return 'wlan'+[...middle].map(mapChar).join('') }
+    function mapChar(c){ const lower=c.toLowerCase(); if(map.hasOwnProperty(lower)) return map[lower]; return /[A-Za-z]/.test(c)? lower : c }
 
-    function showResult(result){ if(!result){ output.textContent='Invalid input'; output.className='alert text-center alert-danger'; copyBtn.disabled=true } else { output.textContent=result; output.className='alert text-center alert-success'; copyBtn.disabled=false } }
+    function generateSSID(input){
+      if(!input) return '';
+      if(!input.toLowerCase().startsWith('fh_')) return '';
+      const parts = input.split('_').filter(Boolean);
+      if(parts.length < 2) return '';
+      const middle = parts[1];
+      if(!middle) return '';
+      return 'wlan' + [...middle].map(mapChar).join('');
+    }
 
-    generateBtn.addEventListener('click', ()=> showResult(generateSSID(inputField.value.trim())) );
-    inputField.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); generateBtn.click() } });
-    copyBtn.addEventListener('click', async ()=>{ const text=output.textContent; if(!text || text==='Invalid input') return; try{ await navigator.clipboard.writeText(text); copyBtn.textContent='Copied!'; setTimeout(()=>copyBtn.textContent='Copy',1500) }catch(err){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); copyBtn.textContent='Copied!' }catch(e){ copyBtn.textContent='Copy Failed' } finally{ document.body.removeChild(ta); setTimeout(()=>copyBtn.textContent='Copy',1500) } } });
+    function showResult(result){
+      if(!result){
+        output.textContent = 'Invalid input';
+        output.style.borderColor = '#f8d7da';
+        output.style.background = '#fff5f6';
+        copyBtn.disabled = true;
+      } else {
+        output.textContent = result;
+        output.style.borderColor = 'transparent';
+        output.style.background = '#ffffff';
+        copyBtn.disabled = false;
+      }
+    }
 
-    // small UX: autofill sample on first load
-    if(!inputField.value) inputField.value='fh_XxXxXx_5G';
+    // live preview while typing
+    inputField.addEventListener('input', (e)=>{
+      const val = e.target.value.trim();
+      const pv = generateSSID(val);
+      livePreview.textContent = pv || 'wlan... (live)';
+    });
+
+    // generate button with small visual feedback
+    generateBtn.addEventListener('click', async ()=>{
+      const val = inputField.value.trim();
+      // button feedback
+      generateBtn.disabled = true;
+      const orig = generateBtn.innerHTML;
+      generateBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Processing...';
+
+      // small delay for UX
+      await new Promise(r => setTimeout(r, 250));
+
+      const result = generateSSID(val);
+      showResult(result);
+
+      generateBtn.innerHTML = orig;
+      generateBtn.disabled = false;
+
+      // auto copy to clipboard on success (optional UX): flash
+      if(result){
+        copyBtn.classList.add('btn-success');
+        setTimeout(()=> copyBtn.classList.remove('btn-success'), 600);
+      }
+    });
+
+    // copy button
+    copyBtn.addEventListener('click', async ()=>{
+      const text = output.textContent;
+      if(!text || text === 'Invalid input' || text === 'Output will appear here') return;
+      try{
+        await navigator.clipboard.writeText(text);
+        copyBtn.innerHTML = '<i class="bi bi-check-lg"></i>';
+        setTimeout(()=> copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>', 1200);
+      }catch(err){
+        // fallback
+        const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); copyBtn.innerHTML = '<i class="bi bi-check-lg"></i>' }catch(e){ copyBtn.innerHTML = '<i class="bi bi-x-lg"></i>' }
+        document.body.removeChild(ta);
+        setTimeout(()=> copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>', 1200);
+      }
+    });
+
+    // prefill example for first load
+    if(!inputField.value) inputField.value = 'fh_XxXxXx_5G';
+    // init preview
+    livePreview.textContent = generateSSID(inputField.value) || 'wlan... (live)';
   </script></body>
 </html>
