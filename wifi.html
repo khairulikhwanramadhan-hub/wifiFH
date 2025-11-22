@@ -1,142 +1,142 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FH WLAN Generator – Khairul</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FH WLAN Generator — Khairul</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#7c3aed;--muted:#98a0ad;--glass:rgba(255,255,255,0.04)}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0b1220 0%, #071023 60%, #02040a 100%);color:#e6eef7}
+    .wrap{max-width:900px;margin:32px auto;padding:20px}
+    .card-ui{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:16px;padding:22px;box-shadow:0 10px 30px rgba(2,6,23,0.6);backdrop-filter:blur(6px)}
+    .brand{display:flex;align-items:center;gap:14px}
+    .avatar{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;background:linear-gradient(135deg,var(--accent),#5b21b6);box-shadow:0 6px 18px rgba(124,58,237,0.25)}
+    h1{font-size:20px;margin:0}
+    .by{color:var(--muted);font-size:13px}
+    .bigname{display:inline-block;padding:4px 10px;background:rgba(124,58,237,0.12);border-radius:999px;color:var(--accent);font-weight:600;margin-left:8px}/* input area */
+.input-wrap{margin-top:18px}
+input[type=text]{width:100%;padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-size:18px}
 
-<style>
-    body {
-        margin: 0;
-        font-family: system-ui, sans-serif;
-        background: #0f0f13;
-        color: #f0f0f0;
-    }
-    .card {
-        max-width: 600px;
-        margin: 20px auto;
-        background: #1b1b22;
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: 0 0 15px #0008;
-    }
-    .title {
-        font-size: 1.7rem;
-        font-weight: 700;
-        margin-bottom: 8px;
-    }
-    .sub {
-        opacity: 0.8;
-        margin-bottom: 18px;
-    }
-    input {
-        width: 100%;
-        padding: 14px;
-        border-radius: 12px;
-        border: none;
-        font-size: 1rem;
-        margin-bottom: 12px;
-    }
-    button {
-        width: 100%;
-        padding: 14px;
-        border-radius: 12px;
-        border: none;
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-top: 6px;
-        cursor: pointer;
-        background: #7a4bff;
-        color: white;
-    }
-    button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-    .copy {
-        background: #30303a;
-        margin-top: 10px;
-    }
-    .outputBox {
-        background: #26262e;
-        padding: 16px;
-        border-radius: 12px;
-        margin-top: 14px;
-        font-size: 1.1rem;
-        word-break: break-all;
-    }
-    .map {
-        margin-top: 20px;
-        opacity: 0.75;
-        font-size: .9rem;
-        line-height: 1.5rem;
-    }
-</style>
+/* buttons */
+.btn-primary-custom{background:linear-gradient(90deg,var(--accent),#4f46e5);border:none;padding:14px 18px;border-radius:12px;color:white;font-weight:600;display:inline-flex;align-items:center;gap:10px}
+.btn-ghost{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:10px;color:var(--muted)}
+
+/* result */
+.result{margin-top:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;color:#dff3e0}
+.result .text{font-weight:700;font-size:18px;color:#dff3e0}
+.muted{color:var(--muted);font-size:13px}
+
+/* loading animation */
+.loader{width:28px;height:28px;border-radius:6px;display:inline-block;position:relative}
+.loader span{position:absolute;inset:0;border-radius:6px;box-shadow:inset 0 0 0 4px rgba(255,255,255,0.03);}
+.loader .bar{height:100%;width:100%;background:linear-gradient(90deg,#fff0,#fff);transform-origin:left center;border-radius:6px;animation:loading 900ms linear infinite}
+@keyframes loading{0%{transform:scaleX(0.02);opacity:0.6}50%{transform:scaleX(0.9);opacity:1}100%{transform:scaleX(0.02);opacity:0.6}}
+
+/* responsive */
+@media (max-width:520px){.wrap{padding:12px;margin:14px}.card-ui{padding:16px;border-radius:14px}.avatar{width:48px;height:48px}.bigname{display:block;margin-top:8px}}
+
+/* small helpers */
+.flex{display:flex;align-items:center;gap:12px}
+.space-between{display:flex;justify-content:space-between;align-items:center}
+
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <div class="card-ui">
+      <div class="brand">
+        <div class="avatar">KH</div>
+        <div>
+          <h1>FH WLAN Generator <span class="bigname">Khairul Ikhwan</span></h1>
+          <div class="by">Crafted by <strong>Khairul Ikhwan Ramadhan</strong> · <span class="muted">2025 · Static</span></div>
+        </div>
+      </div><p class="muted" style="margin-top:14px">Masukkan SSID sumber yang diawali <code>fh_</code>. Contoh: <code>fh_XxXxXx_5G</code></p>
 
-<div class="card">
-    <div class="title">FH WLAN Generator</div>
-    <div class="sub">Crafted by <b>Khairul Ikhwan Ramadhan</b> · 2025</div>
+  <div class="input-wrap">
+    <input id="inputField" type="text" placeholder="fh_XxXxXx_5G" value="" aria-label="input" />
+  </div>
 
-    <input id="ssid" placeholder="Contoh: fh_XxXxXx_5G">
+  <div style="margin-top:14px" class="space-between">
+    <button id="generateBtn" class="btn-primary-custom" aria-live="polite">
+      <span id="genIcon" style="display:inline-block;min-width:20px"></span>
+      <span id="genText">Get Passkey</span>
+    </button>
+    <button id="copyBtn" class="btn-ghost" disabled title="Copy result">📋 Copy</button>
+  </div>
 
-    <button id="genBtn">Get Passkey</button>
-    <button id="copyBtn" class="copy" disabled>Copy</button>
-
-    <div id="out" class="outputBox">Output will appear here</div>
-
-    <div class="map">
-        <b>Mapping:</b> a ↔ 5, b ↔ 4, c ↔ 3, d ↔ 2, e ↔ 1, f ↔ 0,  
-        6 ↔ 9, 7 ↔ 8
+  <div class="result" id="resultBox" style="margin-top:16px">
+    <div class="space-between">
+      <div class="muted">Output will appear here</div>
+      <div class="muted" id="bandBadge"></div>
     </div>
+    <div style="margin-top:8px" class="text" id="outputText">&nbsp;</div>
+  </div>
+
+  <div style="margin-top:12px" class="muted">Mapping: a ↔ 5, b ↔ 4, c ↔ 3, d ↔ 2, e ↔ 1, f ↔ 0, 6 ↔ 9, 7 ↔ 8</div>
+
 </div>
 
-<script>
-function generateSSID(input) {
-    if (!input.startsWith("fh_")) return null;
+  </div><script>
+// safe helper to check object keys without relying on hasOwnProperty on the object
+function safeHas(o,k){ return Object.prototype.hasOwnProperty.call(o,k); }
 
-    // ambil middle part sebelum _5G / _2G
-    const mid = input.replace("fh_", "").replace("_5G", "").replace("_2G", "");
+const pairs = [['a','5'],['b','4'],['c','3'],['d','2'],['e','1'],['f','0'],['6','9'],['7','8']];
+const map = {};
+for(const [k,v] of pairs){ map[k]=v; map[v]=k; }
 
-    const table = {a:"5",b:"4",c:"3",d:"2",e:"1",f:"0","6":"9","7":"8",
-                   "5":"a","4":"b","3":"c","2":"d","1":"e","0":"f","9":"6","8":"7"};
+function mapChar(c){ const lower = String(c).toLowerCase(); return safeHas(map,lower) ? map[lower] : c; }
+function generateSSID(s){ if(!s) return ''; const t=String(s).trim(); if(!t.toLowerCase().startsWith('fh_')) return ''; const parts=t.split('_').filter(Boolean); if(parts.length<2) return ''; const mid=parts[1]; return 'wlan'+[...mid].map(mapChar).join(''); }
+function detectBand(s){ if(!s) return 'Unknown'; const t=String(s).toLowerCase(); if(t.includes('_5g')) return '5G'; if(t.includes('_2.4g') || t.includes('_24g')) return '2.4G'; return 'Unknown'; }
 
-    let out = "";
-    for (const ch of mid) out += table[ch.toLowerCase()] ?? ch;
+// DOM
+const inputField=document.getElementById('inputField');
+const generateBtn=document.getElementById('generateBtn');
+const genText=document.getElementById('genText');
+const genIcon=document.getElementById('genIcon');
+const copyBtn=document.getElementById('copyBtn');
+const outputText=document.getElementById('outputText');
+const bandBadge=document.getElementById('bandBadge');
 
-    return "wlan" + out;
+function showLoading(){ genIcon.innerHTML=' <div class="loader"><span class="bar"></span></div>'; genText.textContent='Processing...'; generateBtn.disabled=true; }
+function hideLoading(){ genIcon.innerHTML=''; genText.textContent='Get Passkey'; generateBtn.disabled=false; }
+
+async function doGenerate(){ const val=inputField.value.trim(); if(!val){ outputText.textContent='Invalid input'; copyBtn.disabled=true; bandBadge.textContent=''; return; }
+  showLoading(); // small delay to show animation
+  await new Promise(r=>setTimeout(r,220));
+  const result = generateSSID(val);
+  outputText.textContent = result || 'Invalid input';
+  copyBtn.disabled = !result;
+  bandBadge.textContent = result ? 'band: '+detectBand(val) : '';
+  hideLoading();
 }
 
-const ssid = document.getElementById("ssid");
-const outBox = document.getElementById("out");
-const genBtn = document.getElementById("genBtn");
-const copyBtn = document.getElementById("copyBtn");
+generateBtn.addEventListener('click', doGenerate);
+inputField.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); doGenerate(); } });
 
-genBtn.onclick = () => {
-    const val = ssid.value.trim();
-    const result = generateSSID(val);
-    if (!result) {
-        outBox.textContent = "Invalid input";
-        copyBtn.disabled = true;
-        return;
-    }
-    outBox.textContent = result;
-    copyBtn.disabled = false;
-};
+copyBtn.addEventListener('click', async ()=>{
+  const text = outputText.textContent || '';
+  if(!text || text==='Invalid input') return;
+  try{ await navigator.clipboard.writeText(text); copyBtn.textContent='Copied ✓'; setTimeout(()=>copyBtn.textContent='📋 Copy',1200);}catch(e){ // fallback
+    const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); copyBtn.textContent='Copied ✓'; }catch(err){ copyBtn.textContent='Copy failed'; } ta.remove(); setTimeout(()=>copyBtn.textContent='📋 Copy',1200);
+  }
+});
 
-copyBtn.onclick = async () => {
-    try {
-        await navigator.clipboard.writeText(outBox.textContent);
-        copyBtn.textContent = "Copied!";
-        setTimeout(() => copyBtn.textContent = "Copy", 800);
-    } catch {
-        copyBtn.textContent = "Failed";
-        setTimeout(() => copyBtn.textContent = "Copy", 800);
-    }
-};
-</script>
+// small usability: live preview while typing (non-blocking)
+let liveTimer=null;
+inputField.addEventListener('input', ()=>{
+  clearTimeout(liveTimer);
+  liveTimer=setTimeout(()=>{
+    const live=generateSSID(inputField.value) || '...';
+    outputText.textContent = live;
+    bandBadge.textContent = live==='...' ? '' : 'band: '+detectBand(inputField.value);
+    copyBtn.disabled = !live || live==='...';
+  },250);
+});
 
-</body>
+// set some placeholder example
+inputField.value='fh_XxXxXx_5G';
+outputText.textContent='';
+</script></body>
 </html>
