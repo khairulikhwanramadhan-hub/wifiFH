@@ -8,87 +8,93 @@
 <!-- QR lib (client side) -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js" defer></script>
 
-<!-- Styles: light + dark + animations -->
+<!-- MOBILE-FIRST STYLES -->
 <style>
   :root{
-    --bg:#f6f8fb; --card:#fff; --text:#111; --muted:#8a97a3;
-    --accent:#6f42c1; --accent-2:#5a20a6; --success:#2f8f6a;
-    --glass: rgba(255,255,255,0.65);
+    --bg:#f5f7fa; --card:#ffffff; --muted:#7d8b96; --text:#0f1720;
+    --accent:#6f42c1; --accent-2:#5a20a6; --glass:rgba(255,255,255,0.6);
+    --success:#2f8f6a;
   }
   @media(prefers-color-scheme:dark){
     :root{
-      --bg:#0f1720; --card:#071022; --text:#e6eef6; --muted:#9aa9b8;
-      --glass: rgba(10,12,16,0.45);
+      --bg:#071023; --card:#081226; --muted:#9aa9b8; --text:#e6f0fb; --glass:rgba(10,12,16,0.45)
     }
   }
 
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text)}
-  .wrap{max-width:880px;margin:28px auto;padding:20px}
-  .card{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(12,15,30,0.06);transition:transform .18s ease,box-shadow .18s ease}
-  .card:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(12,15,30,0.08)}
-  .head{display:flex;align-items:center;gap:14px}
-  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px}
-  h1{margin:0;font-size:20px}
-  .muted{color:var(--muted);font-size:13px}
-  .row{display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap}
-  input.input{flex:1;padding:14px 16px;border-radius:12px;border:1px solid #e9eef6;font-size:18px;background:transparent;outline:none;color:var(--text)}
-  input.input:focus{box-shadow:0 4px 14px rgba(111,66,193,0.08);border-color:rgba(111,66,193,0.18)}
-  .btn{background:var(--accent);color:#fff;padding:12px 18px;border-radius:12px;border:0;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:10px}
-  .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(0,0,0,0.06)}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+  .container{max-width:760px;margin:18px auto;padding:12px}
+  /* card */
+  .card{background:var(--card);border-radius:14px;padding:16px;box-shadow:0 12px 28px rgba(12,15,30,0.06);transition:transform .18s ease,box-shadow .18s ease;overflow:hidden}
+  .card:active{transform:translateY(-2px)}
+  /* header */
+  .head{display:flex;align-items:center;gap:12px}
+  .logo{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;flex:0 0 54px}
+  h1{margin:0;font-size:18px}
+  .meta{font-size:13px;color:var(--muted)}
+  /* form row */
+  .form-row{display:flex;gap:10px;margin-top:12px;align-items:center;flex-wrap:wrap}
+  .input{flex:1;padding:12px 14px;border-radius:12px;border:1px solid rgba(15,20,30,0.06);font-size:16px;background:transparent;color:var(--text);outline:none}
+  .input:focus{box-shadow:0 6px 18px rgba(111,66,193,0.08);border-color:rgba(111,66,193,0.14)}
+  .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;border:0;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:10px}
+  .btn.ghost{background:transparent;border:1px solid rgba(15,20,30,0.06);color:var(--text)}
   .btn:disabled{opacity:.6;cursor:not-allowed}
-  .output{margin-top:16px;padding:14px;border-radius:12px;border:1px solid rgba(0,0,0,0.04);background:linear-gradient(180deg,var(--glass),transparent);display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px}
-  .out-left{display:flex;flex-direction:column}
-  .big{font-size:18px;font-weight:600;color:var(--text)}
-  .small{font-size:13px;color:var(--muted)}
-  .badge{padding:6px 10px;border-radius:999px;background:rgba(111,66,193,0.08);color:var(--accent);font-weight:700}
-  .mapping{margin-top:12px;color:var(--muted);font-size:13px}
-  .flex{display:flex;gap:10px;align-items:center}
-  .qr-box{width:120px;height:120px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.04);display:flex;align-items:center;justify-content:center;background:transparent}
-  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#111;color:#fff;padding:10px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .28s ease}
+  /* output */
+  .output{margin-top:14px;padding:12px;border-radius:12px;border:1px solid rgba(15,20,30,0.03);background:linear-gradient(180deg,var(--glass),transparent);display:flex;gap:12px;align-items:center;justify-content:space-between;min-height:62px}
+  .left{display:flex;flex-direction:column;gap:8px}
+  .result{font-weight:700;font-size:17px}
+  .status{font-size:13px;color:var(--muted)}
+  .badge{padding:6px 10px;border-radius:999px;background:rgba(111,66,193,0.08);color:var(--accent);font-weight:700;font-size:13px}
+  /* qr */
+  .qr{width:100px;height:100px;border-radius:10px;border:1px solid rgba(15,20,30,0.03);display:flex;align-items:center;justify-content:center}
+  /* mapping & footer */
+  .mapping{margin-top:14px;color:var(--muted);font-size:13px}
+  .footer{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
+  /* toast */
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .28s}
   .toast.show{opacity:1;pointer-events:auto}
-
-  /* small screens */
-  @media(max-width:600px){
-    .head{gap:12px}
-    .logo{width:48px;height:48px}
-    .qr-box{width:90px;height:90px}
+  /* responsive small screens */
+  @media(max-width:520px){
+    .logo{width:46px;height:46px}
+    .qr{width:78px;height:78px}
+    .result{font-size:15px}
+    h1{font-size:16px}
   }
 </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="container">
     <div class="card" role="main" aria-label="FH WLAN Generator">
       <div class="head">
         <div class="logo">KH</div>
-        <div>
+        <div style="flex:1">
           <h1>FH WLAN Generator</h1>
-          <div class="muted">Crafted by <strong>Khairul Ikhwan Ramadhan</strong> · <span class="small">2025 · Static</span></div>
+          <div class="meta">Crafted by <strong>Khairul Ikhwan Ramadhan</strong> · <span style="color:var(--muted)">2025 · Static</span></div>
         </div>
-        <div style="flex:1"></div>
-        <div class="small muted">v1.3</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <div style="font-size:12px;color:var(--muted)">v1.3</div>
+        </div>
       </div>
 
-      <p class="small muted" style="margin-top:12px">Masukkan SSID sumber yang diawali <code>fh_</code>. Contoh: <code>fh_XxXxXx_5G</code></p>
+      <p class="meta" style="margin-top:12px">Masukkan SSID sumber yang diawali <code>fh_</code>. Contoh: <code>fh_XxXxXx_5G</code></p>
 
-      <div class="row">
-        <input id="inputField" class="input" type="text" value="fh_XxXxXx_5G" aria-label="SSID input" />
-        <button id="generateBtn" class="btn">Get Passkey</button>
-        <button id="copyBtn" class="btn ghost" title="Copy result" disabled>📋 Copy</button>
+      <div class="form-row">
+        <input id="inputField" class="input" type="text" placeholder="fh_XxXxXx_5G" aria-label="SSID input" value="fh_XxXxXx_5G" />
+        <button id="generateBtn" class="btn" type="button">Get Passkey</button>
+        <button id="copyBtn" class="btn ghost" type="button" disabled>📋 Copy</button>
       </div>
 
-      <div class="output" aria-live="polite" style="margin-top:14px">
-        <div class="out-left">
-          <div id="outputText" class="big">Output will appear here</div>
-          <div style="margin-top:6px;display:flex;gap:8px;align-items:center">
+      <div class="output" aria-live="polite">
+        <div class="left">
+          <div id="outputText" class="result">Output will appear here</div>
+          <div style="display:flex;gap:10px;align-items:center">
             <div id="bandBadge" class="badge">band: —</div>
-            <div id="statusText" class="small">wlan... (live)</div>
+            <div id="statusText" class="status">wlan... (live)</div>
           </div>
         </div>
-
-        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
-          <div id="qr" class="qr-box" aria-hidden="true"></div>
-          <div class="small muted">Scan QR untuk connect</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+          <div id="qr" class="qr" aria-hidden="true"></div>
+          <div style="font-size:12px;color:var(--muted)">Scan QR untuk connect</div>
         </div>
       </div>
 
@@ -96,16 +102,148 @@
         <strong>Mapping:</strong> a ↔ 5, b ↔ 4, c ↔ 3, d ↔ 2, e ↔ 1, f ↔ 0, 6 ↔ 9, 7 ↔ 8
       </div>
     </div>
+
+    <div class="footer">© 2025 Khairul Ikhwan Ramadhan — <a href="https://github.com/khairulikhwanramadhan-hub/wifiFH" target="_blank" rel="noopener" style="color:var(--accent)">Repo</a></div>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+<!-- SCRIPT: logic (safe + mobile friendly) -->
 <script>
-/* ---------- Safe mapping ---------- */
-const pairs = [['a','5'],['b','4'],['c','3'],['d','2'],['e','1'],['f','0'],['6','9'],['7','8']];
-const map = Object.create(null);
-for (const [k,v] of pairs){ map[k]=v; map[v]=k; }
-function safeHas(o,k){ return Object.prototype.hasOwnProperty.call(o,k) }
+(function(){
+  'use strict';
+
+  /* safe mapping */
+  const pairs = [['a','5'],['b','4'],['c','3'],['d','2'],['e','1'],['f','0'],['6','9'],['7','8']];
+  const map = Object.create(null);
+  for (const [k,v] of pairs){ map[k]=v; map[v]=k; }
+  function safeHas(o,k){ return Object.prototype.hasOwnProperty.call(o,k); }
+
+  /* DOM */
+  const $ = s => document.querySelector(s);
+  const input = $('#inputField');
+  const out = $('#outputText');
+  const status = $('#statusText');
+  const bandBadge = $('#bandBadge');
+  const genBtn = $('#generateBtn');
+  const copyBtn = $('#copyBtn');
+  const qrBox = $('#qr');
+  const toast = $('#toast');
+
+  function showToast(msg, t=1100){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), t);
+  }
+
+  /* core */
+  function mapChar(c){
+    const lower = String(c).toLowerCase();
+    return safeHas(map, lower) ? map[lower] : c;
+  }
+  function generateSSID(s){
+    if (!s) return '';
+    const t = String(s).trim();
+    if (!t.toLowerCase().startsWith('fh_')) return '';
+    const parts = t.split('_').filter(Boolean);
+    if (parts.length < 2) return '';
+    const mid = parts[1];
+    return 'wlan' + [...mid].map(mapChar).join('');
+  }
+
+  function detectBand(s){
+    if (!s) return '—';
+    const t = String(s).toLowerCase();
+    if (t.includes('_5g')) return '5G';
+    if (t.includes('_2.4g') || t.includes('_24g')) return '2.4G';
+    return 'Unknown';
+  }
+
+  /* QR / payload builder */
+  function esc(v){ return String(v).replace(/([\\;,:"])/g,'\\$1') }
+  function makeWifiPayload(ssid, pass, type='WPA'){ return `WIFI:T:${type};S:${esc(ssid)};P:${esc(pass)};;` }
+
+  function renderQR(text){
+    // clear
+    qrBox.innerHTML = '';
+    if (!text) return;
+    if (window.QRCode && typeof QRCode.toCanvas === 'function'){
+      // generate canvas
+      try {
+        QRCode.toCanvas(text, { width: qrBox.clientWidth - 8, margin:0 }, function(err, canvas){
+          if (err){ console.error(err); qrBox.textContent = 'QR err'; return; }
+          qrBox.appendChild(canvas);
+        });
+      } catch(e){ qrBox.textContent = 'QR'; console.error(e) }
+    } else {
+      // fallback: plain text preview
+      qrBox.textContent = text.slice(0,24) + '...';
+    }
+  }
+
+  /* UI update */
+  function updateLive(){
+    const val = input.value;
+    const live = generateSSID(val);
+    status.textContent = live || 'wlan... (live)';
+    const band = detectBand(val);
+    bandBadge.textContent = band === 'Unknown' ? 'band: —' : 'band: ' + band;
+    // show small live preview in QR placeholder if exist
+    if (live) renderQR(makeWifiPayload(live, live, 'WPA'));
+    else renderQR('');
+  }
+
+  input.addEventListener('input', updateLive);
+
+  genBtn.addEventListener('click', function(){
+    genBtn.disabled = true;
+    genBtn.textContent = 'Processing...';
+    setTimeout(function(){
+      const res = generateSSID(input.value);
+      out.textContent = res || 'Invalid input';
+      copyBtn.disabled = !res;
+      // update QR / badge
+      updateLive();
+      genBtn.disabled = false;
+      genBtn.textContent = 'Get Passkey';
+      showToast(res ? 'Passkey generated' : 'Invalid input');
+    }, 140);
+  });
+
+  // copy handler with fallback
+  copyBtn.addEventListener('click', async function(){
+    const txt = out.textContent || '';
+    if (!txt || txt === 'Invalid input' || txt === 'Output will appear here') return;
+    try {
+      await navigator.clipboard.writeText(txt);
+      showToast('Copied to clipboard');
+    } catch (err){
+      const ta = document.createElement('textarea');
+      ta.value = txt;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast('Copied (fallback)');
+      } catch(e){
+        showToast('Copy failed');
+      }
+      document.body.removeChild(ta);
+    }
+  });
+
+  // allow Enter key to generate
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){ e.preventDefault(); genBtn.click(); }
+  });
+
+  // initial
+  updateLive();
+
+})();
+</script>
+</body>
+</html>function safeHas(o,k){ return Object.prototype.hasOwnProperty.call(o,k) }
 
 /* ---------- helpers ---------- */
 const $ = sel => document.querySelector(sel);
