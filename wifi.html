@@ -4,108 +4,255 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>FH WLAN Generator — Khairul</title>
-<!-- Minimal inline CSS for speed -->
+
+<!-- QR lib (client side) -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js" defer></script>
+
+<!-- Styles: light + dark + animations -->
 <style>
-  :root{--accent:#6f42c1;--muted:#9fa8b3;--bg:#f6f8fb}
-  html,body{height:100%;margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#111}
-  .wrap{max-width:720px;margin:28px auto;padding:18px}
-  .card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(20,20,40,0.06)}
-  .brand{display:flex;align-items:center;gap:12px}
-  .logo{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#5a20a6);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px}
-  h1{font-size:20px;margin:0}
+  :root{
+    --bg:#f6f8fb; --card:#fff; --text:#111; --muted:#8a97a3;
+    --accent:#6f42c1; --accent-2:#5a20a6; --success:#2f8f6a;
+    --glass: rgba(255,255,255,0.65);
+  }
+  @media(prefers-color-scheme:dark){
+    :root{
+      --bg:#0f1720; --card:#071022; --text:#e6eef6; --muted:#9aa9b8;
+      --glass: rgba(10,12,16,0.45);
+    }
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text)}
+  .wrap{max-width:880px;margin:28px auto;padding:20px}
+  .card{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(12,15,30,0.06);transition:transform .18s ease,box-shadow .18s ease}
+  .card:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(12,15,30,0.08)}
+  .head{display:flex;align-items:center;gap:14px}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px}
+  h1{margin:0;font-size:20px}
   .muted{color:var(--muted);font-size:13px}
-  .input{width:100%;padding:12px 14px;font-size:18px;border-radius:10px;border:1px solid #e6e9ef;margin-top:14px;box-sizing:border-box}
-  .controls{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
-  .btn{background:var(--accent);color:#fff;padding:12px 18px;border-radius:10px;border:0;font-weight:600;cursor:pointer}
-  .btn[disabled]{opacity:.6;cursor:not-allowed}
-  .icon-btn{background:#fff;border:1px solid #e6e9ef;padding:10px;border-radius:10px;cursor:pointer}
-  .output{margin-top:14px;padding:14px;border-radius:10px;border:1px solid #eef2f6;background:#f8fbfb;min-height:48px;display:flex;align-items:center;justify-content:space-between}
+  .row{display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap}
+  input.input{flex:1;padding:14px 16px;border-radius:12px;border:1px solid #e9eef6;font-size:18px;background:transparent;outline:none;color:var(--text)}
+  input.input:focus{box-shadow:0 4px 14px rgba(111,66,193,0.08);border-color:rgba(111,66,193,0.18)}
+  .btn{background:var(--accent);color:#fff;padding:12px 18px;border-radius:12px;border:0;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:10px}
+  .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(0,0,0,0.06)}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .output{margin-top:16px;padding:14px;border-radius:12px;border:1px solid rgba(0,0,0,0.04);background:linear-gradient(180deg,var(--glass),transparent);display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px}
+  .out-left{display:flex;flex-direction:column}
+  .big{font-size:18px;font-weight:600;color:var(--text)}
   .small{font-size:13px;color:var(--muted)}
-  .mapping{margin-top:14px;color:var(--muted);font-size:13px}
-  @media(max-width:520px){.wrap{padding:12px}}
+  .badge{padding:6px 10px;border-radius:999px;background:rgba(111,66,193,0.08);color:var(--accent);font-weight:700}
+  .mapping{margin-top:12px;color:var(--muted);font-size:13px}
+  .flex{display:flex;gap:10px;align-items:center}
+  .qr-box{width:120px;height:120px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.04);display:flex;align-items:center;justify-content:center;background:transparent}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#111;color:#fff;padding:10px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .28s ease}
+  .toast.show{opacity:1;pointer-events:auto}
+
+  /* small screens */
+  @media(max-width:600px){
+    .head{gap:12px}
+    .logo{width:48px;height:48px}
+    .qr-box{width:90px;height:90px}
+  }
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card" role="main" aria-label="FH WLAN Generator">
-      <div class="brand">
+      <div class="head">
         <div class="logo">KH</div>
         <div>
           <h1>FH WLAN Generator</h1>
-          <div class="muted">Crafted by <strong>Khairul Ikhwan Ramadhan</strong></div>
+          <div class="muted">Crafted by <strong>Khairul Ikhwan Ramadhan</strong> · <span class="small">2025 · Static</span></div>
         </div>
         <div style="flex:1"></div>
-        <div class="small muted">2025 · Static</div>
+        <div class="small muted">v1.3</div>
       </div>
 
       <p class="small muted" style="margin-top:12px">Masukkan SSID sumber yang diawali <code>fh_</code>. Contoh: <code>fh_XxXxXx_5G</code></p>
 
-      <input id="inputField" class="input" type="text" value="fh_XxXxXx_5G" aria-label="SSID input" />
-
-      <div class="controls">
-        <button id="generateBtn" class="btn" type="button">Get Passkey</button>
-        <button id="copyBtn" class="icon-btn" title="Copy result" disabled>📋 Copy</button>
+      <div class="row">
+        <input id="inputField" class="input" type="text" value="fh_XxXxXx_5G" aria-label="SSID input" />
+        <button id="generateBtn" class="btn">Get Passkey</button>
+        <button id="copyBtn" class="btn ghost" title="Copy result" disabled>📋 Copy</button>
       </div>
 
-      <div id="output" class="output">
-        <div id="outputText" class="small">Output will appear here</div>
-        <div id="livePreview" class="small" style="color:#777">wlan... (live)</div>
+      <div class="output" aria-live="polite" style="margin-top:14px">
+        <div class="out-left">
+          <div id="outputText" class="big">Output will appear here</div>
+          <div style="margin-top:6px;display:flex;gap:8px;align-items:center">
+            <div id="bandBadge" class="badge">band: —</div>
+            <div id="statusText" class="small">wlan... (live)</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div id="qr" class="qr-box" aria-hidden="true"></div>
+          <div class="small muted">Scan QR untuk connect</div>
+        </div>
       </div>
 
-      <div class="mapping">
+      <div class="mapping" id="mapping">
         <strong>Mapping:</strong> a ↔ 5, b ↔ 4, c ↔ 3, d ↔ 2, e ↔ 1, f ↔ 0, 6 ↔ 9, 7 ↔ 8
       </div>
     </div>
   </div>
 
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
 <script>
-/* Safe mapping + robust hasOwnProperty check */
+/* ---------- Safe mapping ---------- */
 const pairs = [['a','5'],['b','4'],['c','3'],['d','2'],['e','1'],['f','0'],['6','9'],['7','8']];
-const map = Object.create(null); // intentionally no prototype
-for (const [k,v] of pairs) { map[k] = v; map[v] = k; }
+const map = Object.create(null);
+for (const [k,v] of pairs){ map[k]=v; map[v]=k; }
+function safeHas(o,k){ return Object.prototype.hasOwnProperty.call(o,k) }
 
-/* safeHas: use Object.prototype.hasOwnProperty.call to avoid missing method */
-function safeHas(o, key){ return Object.prototype.hasOwnProperty.call(o, key); }
+/* ---------- helpers ---------- */
+const $ = sel => document.querySelector(sel);
+const input = $('#inputField');
+const out = $('#outputText');
+const live = $('#statusText');
+const bandBadge = $('#bandBadge');
+const genBtn = $('#generateBtn');
+const copyBtn = $('#copyBtn');
+const qrBox = $('#qr');
+const toast = $('#toast');
 
+function showToast(msg, time=1200){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'), time);
+}
+
+/* ---------- core generate ---------- */
 function mapChar(c){
   const lower = String(c).toLowerCase();
   return safeHas(map, lower) ? map[lower] : c;
 }
 
-function generateSSID(input){
-  if (!input) return '';
-  try {
-    const s = String(input).trim();
-    if (!s.toLowerCase().startsWith('fh_')) return '';
-    const parts = s.split('_').filter(Boolean);
-    if (parts.length < 2) return '';
-    const middle = parts[1];
-    const converted = [...middle].map(mapChar).join('');
-    return 'wlan' + converted;
-  } catch(e) {
-    console.error('generateSSID error', e);
-    return '';
-  }
+function generateSSID(s){
+  if (!s) return '';
+  const t = String(s).trim();
+  if (!t.toLowerCase().startsWith('fh_')) return '';
+  const parts = t.split('_').filter(Boolean);
+  if (parts.length < 2) return '';
+  const mid = parts[1];
+  return 'wlan' + [...mid].map(mapChar).join('');
 }
 
-/* DOM hooks */
-const inputField = document.getElementById('inputField');
-const outputText = document.getElementById('outputText');
-const livePreview = document.getElementById('livePreview');
-const generateBtn = document.getElementById('generateBtn');
-const copyBtn = document.getElementById('copyBtn');
+/* ---------- detect band from SSID ---------- */
+function detectBand(s){
+  if (!s) return 'Unknown';
+  const t = String(s).toLowerCase();
+  if (t.includes('_5g')) return '5G';
+  if (t.includes('_2.4g') || t.includes('_24g')) return '2.4G';
+  return 'Unknown';
+}
 
-inputField.addEventListener('input', () => {
-  const live = generateSSID(inputField.value);
-  livePreview.textContent = live || 'wlan... (live)';
+/* ---------- QR: make WiFi QR payload (WPA) ---------- */
+function makeWifiPayload(ssid, password, status='WPA'){
+  // payload format: WIFI:T:WPA;S:SSID;P:password;;
+  // If no password (open), use T:nopass
+  const esc = v => String(v).replace(/([\\;,:"])/g,'\\$1');
+  const t = status ? status : 'WPA';
+  return `WIFI:T:${t};S:${esc(ssid)};P:${esc(password)};;`;
+}
+
+/* ---------- render QR (uses QRCode lib if available) ---------- */
+function renderQR(text){
+  if (!window.QRCode) {
+    // fallback: show plain text
+    qrBox.textContent = text.slice(0,28)+'...';
+    return;
+  }
+  qrBox.innerHTML = '';
+  QRCode.toCanvas(text, { width: 120, margin: 0 }, function (err, canvas) {
+    if (err) {
+      qrBox.textContent = 'QR error';
+      console.error(err);
+      return;
+    }
+    qrBox.appendChild(canvas);
+  });
+}
+
+/* ---------- UI interactions ---------- */
+function updateLivePreview(){
+  const val = input.value;
+  const liveText = generateSSID(val) || 'wlan... (live)';
+  live.textContent = liveText;
+  const b = detectBand(val);
+  bandBadge.textContent = b === 'Unknown' ? 'band: —' : `band: ${b}`;
+}
+
+input.addEventListener('input', ()=>{
+  updateLivePreview();
 });
 
-/* Click handler with short simulated processing and robust behavior */
-generateBtn.addEventListener('click', () => {
-  generateBtn.disabled = true;
-  generateBtn.textContent = 'Processing...';
-  // small timeout to simulate work and avoid blocking UI
+genBtn.addEventListener('click', async () => {
+  genBtn.disabled = true;
+  genBtn.textContent = 'Processing...';
+  // tiny debounce to show animation
   setTimeout(() => {
+    const result = generateSSID(input.value);
+    out.textContent = result || 'Invalid input';
+    // update copy button state
+    copyBtn.disabled = !result;
+    // status badge
+    const band = detectBand(input.value);
+    bandBadge.textContent = band === 'Unknown' ? 'band: —' : `band: ${band}`;
+    // generate QR code payload for WiFi connection (we use result as SSID + assume no password)
+    if (result) {
+      // NOTE: We don't know the real WPA password; use the generated SSID as example passkey so QR is connectable only if that is the actual PSK.
+      const wifiPass = result; // uses passkey same as generated for demo; change if you have real pass
+      const payload = makeWifiPayload(result, wifiPass, 'WPA');
+      renderQR(payload);
+    } else {
+      qrBox.innerHTML = '';
+    }
+    genBtn.disabled = false;
+    genBtn.textContent = 'Get Passkey';
+    showToast(result ? 'Passkey generated' : 'Invalid input');
+  }, 120);
+});
+
+/* copy with clipboard API + fallback */
+copyBtn.addEventListener('click', async () => {
+  const text = out.textContent || '';
+  if (!text || text === 'Invalid input' || text === 'Output will appear here') return;
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast('Copied to clipboard');
+  } catch (err) {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showToast('Copied (fallback)');
+    } catch (e) {
+      showToast('Copy failed');
+    }
+    document.body.removeChild(ta);
+  }
+});
+
+/* accessibility: enter key */
+input.addEventListener('keydown', (ev) => {
+  if (ev.key === 'Enter') {
+    ev.preventDefault();
+    genBtn.click();
+  }
+});
+
+/* initial render */
+updateLivePreview();
+renderQR(''); // empty QR placeholder
+</script>
+</body>
+</html>  setTimeout(() => {
     const result = generateSSID(inputField.value);
     outputText.textContent = result || 'Invalid input';
     copyBtn.disabled = !result;
