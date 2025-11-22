@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="id">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Test JS</title></head>
+<body style="font-family:system-ui;display:flex;flex-direction:column;gap:12px;align-items:center;padding:24px">
+  <h2>JS Test</h2>
+  <button id="run">Run generateSSID('fh_844990_5G')</button>
+  <div id="result" style="padding:12px;border:1px solid #ddd;border-radius:8px;min-width:200px">Hasil akan muncul di sini</div>
+<script>
+  // simple local mapping (same logic)
+  const pairs=[['a','5'],['b','4'],['c','3'],['d','2'],['e','1'],['f','0'],['6','9'],['7','8']];
+  const map=Object.create(null); for(const [k,v] of pairs){map[k]=v;map[v]=k}
+  function mapChar(c){ const lower=c.toLowerCase(); if(map.hasOwnProperty(lower)) return map[lower]; return /[A-Za-z]/.test(c)?lower:c }
+  function generateSSID(s){ if(!s) return ''; if(!s.toLowerCase().startsWith('fh_')) return ''; const parts=s.split('_').filter(Boolean); if(parts.length<2) return ''; const mid=parts[1]; return 'wlan'+[...mid].map(mapChar).join('') }
+  document.getElementById('run').addEventListener('click', ()=>{
+    try{
+      const out = generateSSID('fh_844990_5G');
+      document.getElementById('result').textContent = out;
+      alert('Result: '+out);
+    }catch(e){
+      document.getElementById('result').textContent = 'ERROR: '+(e && e.message);
+      alert('Error: '+(e && e.message));
+    }
+  });
+</script>
+</body>
+</html>
